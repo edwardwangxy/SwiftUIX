@@ -154,6 +154,11 @@ extension CocoaList {
         then({ $0.style = style })
     }
     
+    @inlinable
+    public func configure(_ configure: CocoaScrollViewConfiguration) -> Self {
+        then({ $0.scrollViewConfiguration = configure })
+    }
+    
     #if !os(tvOS)
     @inlinable
     public func listSeparatorStyle(_ separatorStyle: UITableViewCell.SeparatorStyle) -> Self {
