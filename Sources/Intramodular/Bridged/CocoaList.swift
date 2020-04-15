@@ -31,9 +31,12 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
     @usableFromInline
     var scrollViewConfiguration = CocoaScrollViewConfiguration<AnyView>()
     
+    @usableFromInline
+    var scrollToBottom = false
+    
     @Environment(\.initialContentAlignment) var initialContentAlignment
     @Environment(\.isScrollEnabled) var isScrollEnabled
-    
+
     public init(
         _ data: Data,
         sectionHeader: @escaping (SectionModel) -> SectionHeader,
@@ -70,9 +73,15 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
         uiViewController.tableView.separatorStyle = separatorStyle
         #endif
         
+        
         uiViewController.tableView.configure(with: scrollViewConfiguration)
         
         uiViewController.reloadData()
+        
+        if self.scrollToBottom {
+            let scrollPoint = CGPoint(x: 0, y: uiViewController.tableView.contentSize.height - uiViewController.tableView.frame.size.height)
+            uiViewController.tableView.setContentOffset(scrollPoint, animated: true)
+        }
     }
 }
 
@@ -159,6 +168,7 @@ extension CocoaList {
     public func listSeparatorStyle(_ separatorStyle: UITableViewCell.SeparatorStyle) -> Self {
         then({ $0.separatorStyle = separatorStyle })
     }
+    
     #endif
 }
 
@@ -199,6 +209,11 @@ extension CocoaList {
     @inlinable
     public func isDirectionalLockEnabled(_ isDirectionalLockEnabled: Bool) -> Self {
         then({ $0.scrollViewConfiguration.isDirectionalLockEnabled = isDirectionalLockEnabled })
+    }
+    
+    @inlinable
+    public func scrollToBottom(_ scrollToBottom: Bool) -> Self {
+        then({ $0.scrollToBottom = scrollToBottom })
     }
 }
 

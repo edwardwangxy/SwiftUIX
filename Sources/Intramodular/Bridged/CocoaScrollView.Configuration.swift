@@ -23,6 +23,9 @@ public struct CocoaScrollViewConfiguration<Content: View> {
     @usableFromInline
     var isRefreshing: Bool?
     
+    @usableFromInline
+    var contentInset: UIEdgeInsets?
+    
     @available(tvOS, unavailable)
     @usableFromInline
     var setupRefreshControl: ((UIRefreshControl) -> Void)?
@@ -51,6 +54,7 @@ extension UIScrollView {
         alwaysBounceVertical = configuration.alwaysBounceVertical
         alwaysBounceHorizontal = configuration.alwaysBounceHorizontal
         isDirectionalLockEnabled = configuration.isDirectionalLockEnabled
+        contentInset = configuration.contentInset ?? UIEdgeInsets(all: 0)
         #if os(iOS) || targetEnvironment(macCatalyst)
         isPagingEnabled = configuration.isPagingEnabled
         #endif
