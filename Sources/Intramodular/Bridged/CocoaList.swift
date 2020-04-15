@@ -154,11 +154,6 @@ extension CocoaList {
         then({ $0.style = style })
     }
     
-    @inlinable
-    public func configure(_ configure: CocoaScrollViewConfiguration) -> Self {
-        then({ $0.scrollViewConfiguration = configure })
-    }
-    
     #if !os(tvOS)
     @inlinable
     public func listSeparatorStyle(_ separatorStyle: UITableViewCell.SeparatorStyle) -> Self {
@@ -184,6 +179,26 @@ extension CocoaList {
     @inlinable
     public func isRefreshing(_ isRefreshing: Bool) -> Self {
         then({ $0.scrollViewConfiguration.isRefreshing = isRefreshing })
+    }
+    
+    @inlinable
+    public func alwaysBounceVertical(_ alwaysBounceVertical: Bool) -> Self {
+        then({ $0.scrollViewConfiguration.alwaysBounceVertical = alwaysBounceVertical })
+    }
+    
+    @inlinable
+    public func alwaysBounceHorizontal(_ alwaysBounceHorizontal: Bool) -> Self {
+        then({ $0.scrollViewConfiguration.alwaysBounceHorizontal = alwaysBounceHorizontal })
+    }
+    
+    @inlinable
+    public func isPagingEnabled(_ isPagingEnabled: Bool) -> Self {
+        then({ $0.scrollViewConfiguration.isPagingEnabled = isPagingEnabled })
+    }
+    
+    @inlinable
+    public func isDirectionalLockEnabled(_ isDirectionalLockEnabled: Bool) -> Self {
+        then({ $0.scrollViewConfiguration.isDirectionalLockEnabled = isDirectionalLockEnabled })
     }
 }
 
