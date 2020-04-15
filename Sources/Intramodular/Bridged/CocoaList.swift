@@ -30,9 +30,7 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
     
     @usableFromInline
     var scrollViewConfiguration = CocoaScrollViewConfiguration<AnyView>()
-    
-    @usableFromInline
-    var scrollToBottom = false
+
     
     @Environment(\.initialContentAlignment) var initialContentAlignment
     @Environment(\.isScrollEnabled) var isScrollEnabled
@@ -78,10 +76,6 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
         
         uiViewController.reloadData()
         
-        if self.scrollToBottom {
-            let scrollPoint = CGPoint(x: 0, y: uiViewController.tableView.contentSize.height - uiViewController.tableView.frame.size.height)
-            uiViewController.tableView.setContentOffset(scrollPoint, animated: true)
-        }
     }
 }
 
@@ -218,7 +212,7 @@ extension CocoaList {
     
     @inlinable
     public func scrollToBottom(_ scrollToBottom: Bool) -> Self {
-        then({ $0.scrollToBottom = scrollToBottom })
+        then({ $0.scrollViewConfiguration.scrollToBottom = scrollToBottom })
     }
 }
 

@@ -25,6 +25,7 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
     var sectionHeader: (SectionModel) -> SectionHeader
     var sectionFooter: (SectionModel) -> SectionFooter
     var rowContent: (Item) -> RowContent
+    var scrollToBottom: Bool = false
     
     var scrollViewConfiguration = CocoaScrollViewConfiguration<AnyView>() {
         didSet {
@@ -41,6 +42,8 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
                 )
             }
             #endif
+            
+            self.scrollToBottom = scrollViewConfiguration.scrollToBottom
             
             tableView?.configure(with: scrollViewConfiguration)
         }
@@ -221,6 +224,15 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
         return max(1, height)
     }
     
+    override public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if self.scrollToBottom {
+            let lastRowIndex = tableView.numberOfRows(inSection: 0)
+            if indexPath.row == lastRowIndex - 1 {
+                tableView.scrollToBottom(animated: true)
+            }
+        }
+    }
+    
     override public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard SectionHeader.self != Never.self else {
             return nil
@@ -381,6 +393,16 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
     }
 }
 
+extension UITableView {
+    func scrollToBottom(animated: Bool = true) {
+        let sections = self.numberOfSections
+        let rows = self.numberOfRows(inSection: sections - 1)
+        if (rows > 0){
+            self.scrollToRow(at: NSIndexPath(row: rows - 1, section: sections - 1) as IndexPath, at: .bottom, animated: true)
+        }
+    }
+}
+
 extension UIHostingTableViewController {
     var _estimatedContentSize: CGSize {
         let originalContentSize = tableView.contentSize
@@ -423,6 +445,12 @@ extension UIHostingTableViewController {
         }
         
         tableView.reloadData()
+        if self.scrollToBottom {
+            DispatchQueue.main.async {
+                let scrollPoint = CGPoint(x: 0, y: self.tableView.contentSize.height - self.tableView.frame.size.height)
+                self.tableView.setContentOffset(scrollPoint, animated: true)
+            }
+        }
     }
     
     private func updateVisibleRows() {

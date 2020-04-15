@@ -24,6 +24,9 @@ public struct CocoaScrollViewConfiguration<Content: View> {
     var isRefreshing: Bool?
     
     @usableFromInline
+    var scrollToBottom: Bool = false
+    
+    @usableFromInline
     var contentInset: UIEdgeInsets?
     
     @available(tvOS, unavailable)
