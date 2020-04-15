@@ -212,6 +212,11 @@ extension CocoaList {
     }
     
     @inlinable
+    public func contentInset(_ contentInset: UIEdgeInsets) -> Self {
+        then({ $0.scrollViewConfiguration.contentInset = contentInset })
+    }
+    
+    @inlinable
     public func scrollToBottom(_ scrollToBottom: Bool) -> Self {
         then({ $0.scrollToBottom = scrollToBottom })
     }
