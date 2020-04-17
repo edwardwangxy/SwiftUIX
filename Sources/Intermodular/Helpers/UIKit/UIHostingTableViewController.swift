@@ -447,8 +447,7 @@ extension UIHostingTableViewController {
         tableView.reloadData()
         if self.scrollToBottom {
             DispatchQueue.main.async {
-                let scrollPoint = CGPoint(x: 0, y: self.tableView.contentSize.height - self.tableView.frame.size.height)
-                self.tableView.setContentOffset(scrollPoint, animated: true)
+                self.tableView.scrollToBottom(animated: true)
             }
         }
     }
@@ -467,8 +466,7 @@ extension UIHostingTableViewController {
         tableView.endUpdates()
         if self.scrollToBottom {
             DispatchQueue.main.async {
-                let scrollPoint = CGPoint(x: 0, y: self.tableView.contentSize.height - self.tableView.frame.size.height)
-                self.tableView.setContentOffset(scrollPoint, animated: true)
+                self.tableView.scrollToBottom(animated: true)
             }
         }
     }
