@@ -440,10 +440,9 @@ extension UIHostingTableViewController {
 
 extension UIHostingTableViewController {
     public func reloadData() {
-//        guard _isDataDirty else {
-//            return updateVisibleRows()
-//        }
-        updateVisibleRows()
+        guard _isDataDirty else {
+            return updateVisibleRows()
+        }
         tableView.reloadData()
         if self.scrollToBottom {
             DispatchQueue.main.async {
