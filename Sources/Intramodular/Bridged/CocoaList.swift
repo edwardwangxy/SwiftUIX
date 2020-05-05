@@ -30,11 +30,10 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
     
     @usableFromInline
     var scrollViewConfiguration = CocoaScrollViewConfiguration<AnyView>()
-
     
     @Environment(\.initialContentAlignment) var initialContentAlignment
     @Environment(\.isScrollEnabled) var isScrollEnabled
-
+    
     public init(
         _ data: Data,
         sectionHeader: @escaping (SectionModel) -> SectionHeader,
@@ -214,6 +213,7 @@ extension CocoaList {
     public func scrollToBottom(_ scrollToBottom: Bool) -> Self {
         then({ $0.scrollViewConfiguration.scrollToBottom = scrollToBottom })
     }
+
 }
 
 #endif
