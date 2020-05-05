@@ -165,13 +165,16 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
         tableView.register(UIHostingTableViewHeaderFooterView<SectionModel, SectionHeader>.self, forHeaderFooterViewReuseIdentifier: .hostingTableViewHeaderViewIdentifier)
         tableView.register(UIHostingTableViewHeaderFooterView<SectionModel, SectionFooter>.self, forHeaderFooterViewReuseIdentifier: .hostingTableViewFooterViewIdentifier)
         tableView.register(UIHostingTableViewCell<Item, RowContent>.self, forCellReuseIdentifier: .hostingTableViewCellIdentifier)
-        if self.scrollToBottom {
-            self.tableView.scrollToBottom(animated: false)
-        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        if self.scrollToBottom {
+            self.tableView.scrollToBottom(animated: false)
+        }
     }
     
     override open func observeValue(
