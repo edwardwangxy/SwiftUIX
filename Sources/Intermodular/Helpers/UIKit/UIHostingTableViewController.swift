@@ -310,32 +310,32 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
         return view
     }
     
-    override public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-//    override public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let item = data[indexPath]
-//
-//        if let cachedHeight = _rowContentHeightCache[item.id] {
-//            return cachedHeight
-//        }
-//
-//        prototypeCell.tableViewController = self
-//        prototypeCell.item = data[indexPath]
-//        prototypeCell.makeContent = rowContent
-//
-//        prototypeCell.update()
-//
-//        let height = prototypeCell
-//            .contentView
-//            .systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
-//            .height
-//
-//        _rowContentHeightCache[item.id] = height
-//
-//        return max(1, height)
+//    override public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return UITableView.automaticDimension
 //    }
+    
+    override public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = data[indexPath]
+
+        if let cachedHeight = _rowContentHeightCache[item.id] {
+            return cachedHeight
+        }
+
+        prototypeCell.tableViewController = self
+        prototypeCell.item = data[indexPath]
+        prototypeCell.makeContent = rowContent
+
+        prototypeCell.update()
+
+        let height = prototypeCell
+            .contentView
+            .systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
+            .height
+
+        _rowContentHeightCache[item.id] = height
+        return UITableView.automaticDimension
+//        return max(1, height)
+    }
     
     override public func tableView(
         _ tableView: UITableView,
