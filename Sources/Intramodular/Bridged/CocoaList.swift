@@ -31,16 +31,20 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
     @usableFromInline
     var scrollViewConfiguration = CocoaScrollViewConfiguration<AnyView>()
     
+    @Binding var needReloadData: Bool
+
     public init(
         _ data: Data,
         sectionHeader: @escaping (SectionModel) -> SectionHeader,
         sectionFooter: @escaping (SectionModel) -> SectionFooter,
-        rowContent: @escaping (Item) -> RowContent
+        rowContent: @escaping (Item) -> RowContent,
+        needReloadData: Binding<Bool>
     ) {
         self.data = data
         self.sectionHeader = sectionHeader
         self.sectionFooter = sectionFooter
         self.rowContent = rowContent
+        self._needReloadData = needReloadData
     }
     
     public func makeUIViewController(context: Context) -> UIViewControllerType {
@@ -79,42 +83,49 @@ extension CocoaList {
         _ data: Data,
         sectionHeader: @escaping (SectionModel) -> SectionHeader,
         sectionFooter: @escaping (SectionModel) -> SectionFooter,
-        rowContent: @escaping (_Item) -> RowContent
+        rowContent: @escaping (_Item) -> RowContent,
+        needReloadData: Binding<Bool>
     ) where Item == HashIdentifiableValue<_Item> {
         self.data = data
         self.sectionHeader = sectionHeader
         self.sectionFooter = sectionFooter
         self.rowContent = { rowContent($0.value) }
+        self._needReloadData = needReloadData
     }
     
     public init<_SectionModel: Hashable, _Item: Hashable>(
         _ data: Data,
         sectionHeader: @escaping (_SectionModel) -> SectionHeader,
         sectionFooter: @escaping (_SectionModel) -> SectionFooter,
-        rowContent: @escaping (_Item) -> RowContent
+        rowContent: @escaping (_Item) -> RowContent,
+        needReloadData: Binding<Bool>
     ) where SectionModel == HashIdentifiableValue<_SectionModel>, Item == HashIdentifiableValue<_Item> {
         self.data = data
         self.sectionHeader = { sectionHeader($0.value) }
         self.sectionFooter = { sectionFooter($0.value) }
         self.rowContent = { rowContent($0.value) }
+        self._needReloadData = needReloadData
     }
     
     public init<_SectionModel: Hashable, _Item: Hashable>(
         _ data: [ListSection<_SectionModel, _Item>],
         sectionHeader: @escaping (_SectionModel) -> SectionHeader,
         sectionFooter: @escaping (_SectionModel) -> SectionFooter,
-        rowContent: @escaping (_Item) -> RowContent
+        rowContent: @escaping (_Item) -> RowContent,
+        needReloadData: Binding<Bool>
     ) where Data == Array<ListSection<SectionModel, Item>>, SectionModel == HashIdentifiableValue<_SectionModel>, Item == HashIdentifiableValue<_Item> {
         self.data = data.map({ .init(model: .init($0.model), items: $0.items.map(HashIdentifiableValue.init)) })
         self.sectionHeader = { sectionHeader($0.value) }
         self.sectionFooter = { sectionFooter($0.value) }
         self.rowContent = { rowContent($0.value) }
+        self._needReloadData = needReloadData
     }
 }
 
 extension CocoaList where Data: RangeReplaceableCollection, SectionModel == Never, SectionHeader == Never, SectionFooter == Never {
     public init<Items: RandomAccessCollection>(
         _ items: Items,
+        needReloadData: Binding<Bool>,
         @ViewBuilder rowContent: @escaping (Item) -> RowContent
     ) where Items.Element == Item {
         var data = Data.init()
@@ -125,7 +136,8 @@ extension CocoaList where Data: RangeReplaceableCollection, SectionModel == Neve
             data,
             sectionHeader: Never.produce,
             sectionFooter: Never.produce,
-            rowContent: rowContent
+            rowContent: rowContent,
+            needReloadData: needReloadData
         )
     }
 }
@@ -133,13 +145,15 @@ extension CocoaList where Data: RangeReplaceableCollection, SectionModel == Neve
 extension CocoaList where Data == Array<ListSection<SectionModel, Item>>, SectionModel == Never, SectionHeader == Never, SectionFooter == Never {
     public init<Items: RandomAccessCollection>(
         _ items: Items,
+        needReloadData: Binding<Bool>,
         @ViewBuilder rowContent: @escaping (Item) -> RowContent
     ) where Items.Element == Item {
         self.init(
             [.init(items: items)],
             sectionHeader: Never.produce,
             sectionFooter: Never.produce,
-            rowContent: rowContent
+            rowContent: rowContent,
+            needReloadData: needReloadData
         )
     }
 }
