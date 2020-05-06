@@ -78,7 +78,7 @@ public struct PaginationView<Page: View>: View {
                 progressionController: $progressionController
             )
             
-            if showsIndicators && axis == .vertical || pageIndicatorAlignment != .center {
+            if showsIndicators && (axis == .vertical || pageIndicatorAlignment != .center) {
                 PageControl(
                     numberOfPages: pages.count,
                     currentPage: currentPageIndex ?? $_currentPageIndex
@@ -92,6 +92,27 @@ public struct PaginationView<Page: View>: View {
         .environment(\.progressionController, progressionController)
     }
 }
+
+extension PaginationView {
+    @inline(never)
+    public init<Data, ID>(
+        axis: Axis = .horizontal,
+        transitionStyle: UIPageViewController.TransitionStyle = .scroll,
+        showsIndicators: Bool = true,
+        @ViewBuilder pages: () -> ForEach<Data, ID, Page>
+    ) {
+        let _pages = pages()
+        
+        self.init(
+            pages: _pages.data.map(_pages.content),
+            axis: axis,
+            transitionStyle: transitionStyle,
+            showsIndicators: showsIndicators
+        )
+    }
+}
+
+// MARK: - API -
 
 extension PaginationView {
     @inlinable

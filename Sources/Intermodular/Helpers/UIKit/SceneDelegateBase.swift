@@ -5,7 +5,6 @@
 #if os(iOS)
 
 import Foundation
-import SwiftUIX
 import UIKit
 
 open class SceneDelegateBase<AppDelegate: UIApplicationDelegate>: UIResponder, UIWindowSceneDelegate {
@@ -15,6 +14,7 @@ open class SceneDelegateBase<AppDelegate: UIApplicationDelegate>: UIResponder, U
         .init()
     }
     
+    @available(iOSApplicationExtension, unavailable)
     open var applicationDelegate: AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
     }
