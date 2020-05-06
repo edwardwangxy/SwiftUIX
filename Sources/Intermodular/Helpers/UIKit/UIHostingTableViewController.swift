@@ -173,7 +173,7 @@ public class UIHostingTableViewController<SectionModel: Identifiable, Item: Iden
         fatalError("init(coder:) has not been implemented")
     }
     
-    override public func viewDidAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         if self.scrollToBottom {
             self.tableView.scrollToBottom(animated: false)
         }
