@@ -463,7 +463,7 @@ extension UIHostingTableViewController {
         }
     }
     
-    private func updateVisibleRows() {
+    public func updateVisibleRows() {
         tableView.beginUpdates()
         
         for indexPath in indexPathsForVisibleRows ?? [] {

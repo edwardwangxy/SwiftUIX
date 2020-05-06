@@ -65,12 +65,13 @@ public struct CocoaList<SectionModel: Identifiable, Item: Identifiable, Data: Ra
         uiViewController.scrollViewConfiguration.initialContentAlignment = context.environment.initialContentAlignment
         uiViewController.scrollViewConfiguration.isScrollEnabled = context.environment.isScrollEnabled
         print("check force result: \(context.environment.isForceReload)")
+        print("Update visible rows")
         #if !os(tvOS)
         uiViewController.tableView.separatorStyle = separatorStyle
         #endif
         
         uiViewController.reloadData()
-        
+        uiViewController.updateVisibleRows()
     }
 }
 
